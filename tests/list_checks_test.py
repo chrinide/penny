@@ -23,15 +23,15 @@ class ListChecksTest(unittest.TestCase):
         assert prob == 0.75
 
 
-    def test_detect_category_delimiter(self):
+    def test_detect_delimiter(self):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
         fileobj = open(cur_dir + '/data/listofdeath.csv')
         rows = list(csv.reader(fileobj))
 
-        delim = detect_category_delimiter(map(lambda x: x[5], rows[1:]))
+        delim = detect_delimiter(map(lambda x: x[5], rows[1:]))
         assert delim == '/'
 
-        delim = detect_category_delimiter(map(lambda x: x[4], rows[1:]))
+        delim = detect_delimiter(map(lambda x: x[4], rows[1:]))
         assert delim == None
 
 

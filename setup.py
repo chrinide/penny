@@ -8,11 +8,11 @@ except (IOError, ImportError):
    long_description = open('README.md').read()
 
 setup(name='penny',
-      version='0.1.1',
+      version='0.2.1',
       description='Inspect csv files and lists of data',
       long_description=long_description,
       url='https://github.com/gati/penny',
-      download_url ='https://github.com/gati/penny/tarball/0.1.1',
+      download_url ='https://github.com/gati/penny/tarball/0.2.1',
       author='Jonathon Morgan',
       author_email='jonathon@goodattheinternet.com',
       license='MIT',

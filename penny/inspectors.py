@@ -1,4 +1,5 @@
-from .value_checks import is_a_date, is_a_int, is_a_bool, is_a_float
+from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float, 
+    is_a_coord, is_a_coord_pair)
 from .list_checks import column_probability_for_type
 import collections
 
@@ -12,6 +13,8 @@ def row_simple_types(row):
     for col in row:
         if is_a_date(col):
             types.append('date')
+        elif is_a_float(col):
+            types.append('float')
         elif is_a_int(col):
             types.append('int')
         else:
@@ -29,7 +32,18 @@ def row_simple_types(row):
 :returns a dictional of type probabilities, like {'date': 1, 'int': .75}
 """
 def column_types_probabilities(values, types=[], pos=None, key=None):
-    types_to_check = types or ['date', 'int', 'bool', 'float', 'category', 'id']
+    all_types = [
+        'date', 
+        'int', 
+        'bool', 
+        'float', 
+        'category', 
+        'id',
+        'coord',
+        'coord_pair'
+    ]
+
+    types_to_check = types or all_types
     types = {}
     for ttc in types_to_check:
         types[ttc] = column_probability_for_type(values, ttc, pos=pos, key=key)

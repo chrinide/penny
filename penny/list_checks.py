@@ -1,7 +1,8 @@
 import itertools
 import math
 import collections
-from .value_checks import is_a_date, is_a_int, is_a_bool, is_a_float
+from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
+    is_a_coord, is_a_coord_pair)
 
 
 """Guesses likelikhood that a column is of the requested type based on its 
@@ -24,7 +25,9 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
         'date': is_a_date,
         'bool': is_a_bool,
         'int': is_a_int,
-        'float': is_a_float 
+        'float': is_a_float,
+        'coord': is_a_coord,
+        'coord_pair': is_a_coord_pair
     }
 
     is_type = 0
@@ -93,7 +96,7 @@ def category_probability(values, key=None, pos=None):
 
     # All category fields are 1 to many. If we detect a delimiter, split the 
     # text field into a list. Otherwise treat the category as a list of 1
-    delimiter = detect_category_delimiter(values)
+    delimiter = detect_delimiter(values)
     if delimiter:
         row_cats = [i.split(delimiter) for i in non_empty]
         all_cats = list(itertools.chain.from_iterable(row_cats))
@@ -165,7 +168,7 @@ category columns in a dataset like a,b,c or a/b/c
 :returns the delimiter or None
 :rtype string or None
 """
-def detect_category_delimiter(values):
+def detect_delimiter(values):
     non_empty = [r for r in values if r != '']
 
     # If this is a mostly empty rows, we don't want to use it
