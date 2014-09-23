@@ -42,6 +42,25 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_coord_pair("-181.23,45")
         assert not is_a_coord_pair("91,91")
 
+    def is_a_city(self):
+        assert is_a_city('Cleveland')
+        assert is_a_city('nairobi')
+        assert is_a_city('LONDON')
+        assert not is_a_city('Belgium')
+
+    def is_a_region(self):
+        assert is_a_region('Ohio')
+        assert is_a_region('Ontario')
+        assert is_a_region('WA')
+        assert is_a_region('montana')
+        assert not is_a_region('murica')
+
+    def is_a_country(self):
+        assert is_a_country('United States')
+        assert is_a_country('France')
+        assert is_a_country('GERMANY')
+        assert not is_a_country('murica')
+
 
 def main():
     unittest.main()

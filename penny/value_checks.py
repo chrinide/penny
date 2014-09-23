@@ -1,4 +1,5 @@
 from dateutil.parser import parse
+from geo_lookup import get_places_by_type
 
 def is_a_bool(value, key=None):
     bool_words = ['y,yes,n,no,true,false,t,f,on,off']
@@ -58,7 +59,13 @@ def is_a_int(value, key=None):
         return False
 
 
-def is_a_str(value, key):
+def is_a_str(value, key=None):
+    if not value or value == "":
+        return False
+
+    if is_a_date(value) or is_a_float(value):
+        return False
+
     return True
 
 
@@ -121,28 +128,39 @@ def is_a_coord_pair(value, key=None, pos=None):
         return True
 
     return False
+    
 
+def is_a_place(value, place_type, key=None):
+    if not is_a_str(value):
+        return False
 
-def is_geo_text(value, key=None, pos=None):
-    admin_areas = [
-        'city', 
-        'state', 
-        'country', 
-        'zipcode',
-        'county',
-        'postal code',
-        'adminArea1',
-        'adminArea2',
-        'adminArea3',
-        'adminArea4',
-        'adminArea5'
-    ]
+    if key:
+        key = str(key).lower().strip()
 
-    if key and str(key).lower().strip() in admin_areas and value != '':
+    if key and key in [place_type]:
         return True
 
-    # if most values are in list of cities
-    # if most values are in list of countries
-    # if key is ST and all values are two characters
-    # if key is zip and all values have 4-9 digits
+    if len(get_places_by_type(value), place_type) > 0:
+        return True
+
+    if place_type in ['country', 'region'] and len(value) < 4 and \
+        len(get_places_by_type(value), place_type + '_iso_code') > 0:
+        return True
+
+    return False
+
+
+def is_a_city(value, key=None, pos=None):
+    return is_a_place(value, 'city', key=key)
+
+
+def is_a_region(value, key=None, pos=None):
+    return is_a_place(value, 'region', key=key)
+
+
+def is_a_country(value, key=None, pos=None):
+    return is_a_place(value, 'country', key=key)
+
+
+def is_a_address(value, key=None, pos=None):
     return False
