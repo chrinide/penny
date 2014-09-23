@@ -134,6 +134,11 @@ def is_a_place(value, place_type, key=None):
     if not is_a_str(value):
         return False
 
+    # If your country's name is longer than 80 characters, you're doing 
+    # something wrong.
+    if len(value) > 80:
+        return False
+
     if key:
         key = str(key).lower().strip()
 
