@@ -61,6 +61,14 @@ class ValueChecksTest(unittest.TestCase):
         assert is_a_country('GERMANY')
         assert not is_a_country('murica')
 
+    def is_a_address(self):
+        assert is_a_address("123 Main Street")
+        assert is_a_address("100 Congress Ave, Austin, 78701")
+        assert is_a_address("Leister Square, London, UK")
+        assert not is_a_address("Four score and seven years ago, blah blah")
+        assert not is_a_address("125")
+        assert not is_a_address("$99")
+
 
 def main():
     unittest.main()
