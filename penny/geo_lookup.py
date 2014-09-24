@@ -16,6 +16,10 @@ def populate_db(conn):
     cur.execute("DROP TABLE IF EXISTS cities")    
 
     cur.execute("CREATE TABLE cities(geoname_id INTEGER, continent_code TEXT, continent TEXT, country_iso_code TEXT, country TEXT, region_iso_code TEXT, region TEXT, city TEXT, metro_code TEXT, time_zone TEXT)")
+    cur.execute("CREATE INDEX index_region ON cities (region)")
+    cur.execute("CREATE INDEX index_region_iso ON cities (region_iso_code)")
+    cur.execute("CREATE INDEX index_country ON cities (country)")
+    cur.execute("CREATE INDEX index_city ON cities (city)")
     cur_dir = os.path.dirname(os.path.realpath(__file__))
     with open(cur_dir+"/data/GeoLite2-City-Locations.csv", "rb") as info:
         reader = csv.reader(info)
@@ -47,21 +51,17 @@ def get_places_by_type(place_name, place_type):
         populate_db(conn)
 
     cur = conn.cursor()
-    cur.execute('SELECT * FROM cities WHERE ' + place_type + ' = "' + place_name + '"')
+    cur.execute('SELECT geoname_id FROM cities WHERE ' + place_type + ' = "' + place_name + '"')
     rows = cur.fetchall()
 
     if len(rows) > 0:
         return rows
 
-    if len(place_name) < 4: #maybe it's an iso code
-        cur.execute('SELECT * FROM cities WHERE ' + place_type + ' = "' + place_name.upper() + '"')
+    if len(place_name) == 2: #maybe it's an iso code
+        cur.execute('SELECT geoname_id FROM cities WHERE ' + place_type + ' = "' + place_name.upper() + '"')
         rows = cur.fetchall()
 
     if len(rows) > 0:
         return rows
-
-    cur.close()
-    del cur
-    conn.close()
 
     return []

@@ -1,7 +1,7 @@
 import unittest
 import csv
 from penny.inspectors import (rows_types_probabilities, row_simple_types,
-    categories_from_list)
+    categories_from_list, column_types_probabilities)
 import os
 
 class InspectorsTest(unittest.TestCase):
@@ -21,6 +21,19 @@ class InspectorsTest(unittest.TestCase):
         assert types == ['str', 'str', 'str', 'int', 'str', 'date', 'date']
 
 
+    def test_column_types_probabilities(self):
+        cur_dir = os.path.dirname(os.path.realpath(__file__))
+        fileobj = open(cur_dir + '/data/banklist.csv')
+
+        rows = list(csv.reader(fileobj))
+        column = [x[2] for x in rows]
+
+        p = column_types_probabilities(column, ['region'])
+
+        assert 'region' in p
+        assert p['region'] == 1
+
+    
     def test_rows_types_probabilties(self):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
         fileobj = open(cur_dir + '/data/banklist.csv')

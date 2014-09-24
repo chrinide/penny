@@ -40,7 +40,11 @@ def column_types_probabilities(values, types=[], pos=None, key=None):
         'category', 
         'id',
         'coord',
-        'coord_pair'
+        'coord_pair',
+        'city',
+        'region',
+        'country',
+        'address'
     ]
 
     types_to_check = types or all_types

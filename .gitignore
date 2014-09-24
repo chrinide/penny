@@ -4,3 +4,4 @@ venv
 /dist/
 /*.egg-info
 /*.egg
+requirements.txt.freeze

@@ -1,5 +1,6 @@
 from dateutil.parser import parse
 from geo_lookup import get_places_by_type
+from address import AddressParser
 
 def is_a_bool(value, key=None):
     bool_words = ['y,yes,n,no,true,false,t,f,on,off']
@@ -145,11 +146,11 @@ def is_a_place(value, place_type, key=None):
     if key and key in [place_type]:
         return True
 
-    if len(get_places_by_type(value), place_type) > 0:
+    if len(get_places_by_type(value, place_type)) > 0:
         return True
 
-    if place_type in ['country', 'region'] and len(value) < 4 and \
-        len(get_places_by_type(value), place_type + '_iso_code') > 0:
+    if place_type in ['region'] and len(value) < 4 and \
+        len(get_places_by_type(value, place_type + '_iso_code')) > 0:
         return True
 
     return False
@@ -168,4 +169,26 @@ def is_a_country(value, key=None, pos=None):
 
 
 def is_a_address(value, key=None, pos=None):
+    if not is_a_str(value):
+        return False
+
+    if len(value) > 100:
+        return False
+
+    ap = AddressParser()
+    address = ap.parse_address(value)
+
+    keys = [
+        'house_number', 
+        'street', 
+        'city',
+        'zip',
+        'state'
+    ]
+
+    has = [key for key in keys if getattr(address, key, None)]
+
+    if len(has) >= 2:
+        return True
+
     return False

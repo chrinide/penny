@@ -2,7 +2,8 @@ import itertools
 import math
 import collections
 from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
-    is_a_coord, is_a_coord_pair)
+    is_a_coord, is_a_coord_pair, is_a_country, is_a_city, is_a_region, 
+    is_a_address)
 
 
 """Guesses likelikhood that a column is of the requested type based on its 
@@ -27,7 +28,11 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
         'int': is_a_int,
         'float': is_a_float,
         'coord': is_a_coord,
-        'coord_pair': is_a_coord_pair
+        'coord_pair': is_a_coord_pair,
+        'city': is_a_city,
+        'region': is_a_region,
+        'country': is_a_country,
+        'address': is_a_address
     }
 
     is_type = 0
