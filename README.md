@@ -70,6 +70,22 @@ rows = list(csv.reader(fileobj))
 probs = rows_types_probabilities(rows)
 ```
 
+Penny checks for a lot of data "types," not just the standard `int`, `str`, etc.
+Here's the list (for now):
+
+- **date** something `dateutil.parser` can parse into a `datetime` object 
+- **int** a whole number 
+- **bool** y/n or yes/no or something true/falsey 
+- **float** a number with a decimal
+- **category** something you might want to group records by 
+- **id** unique for each row
+- **coord** a float that might be a latitude or longitude
+- **coord_pair** string that looks like "coord,coord"
+- **city** one of the world's 80,000 largest cities
+- **region** smaller than a country, bigger than a city. state, province, etc
+- **country** a country name on the [ISO 3166 list](http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
+- **address** a full address you could geocode with a service like Google Maps
+
 Last but not least, you can also inspect a column for a single type.
 
 ```python    
