@@ -65,7 +65,7 @@ def get_places_by_type(place_name, place_type):
         cur.execute('SELECT geoname_id FROM cities WHERE ' + place_type + ' = "' + place_name.upper() + '" LIMIT 1')
         rows = cur.fetchall()
 
-    if len(rows) > 0:
-        return rows
+        if len(rows) > 0:
+            return rows
 
     return []
