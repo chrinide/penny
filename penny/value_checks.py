@@ -61,10 +61,10 @@ def is_a_int(value, key=None):
 
 
 def is_a_str(value, key=None):
-    if not value or value == "":
+    if not value or str(value).strip() == "":
         return False
 
-    if is_a_date(value) or is_a_float(value):
+    if is_a_date(value) or is_a_float(value) or is_a_int(value):
         return False
 
     return True
@@ -135,9 +135,11 @@ def is_a_place(value, place_type, key=None):
     if not is_a_str(value):
         return False
 
-    # If your country's name is longer than 80 characters, you're doing 
+    value = str(value).strip()
+
+    # If your country's name is longer than 40 characters, you're doing 
     # something wrong.
-    if len(value) > 80:
+    if len(value) > 40:
         return False
 
     if key:
@@ -172,7 +174,9 @@ def is_a_address(value, key=None, pos=None):
     if not is_a_str(value):
         return False
 
-    if len(value) > 100:
+    value = str(value).strip()
+
+    if len(value) > 80:
         return False
 
     ap = AddressParser()

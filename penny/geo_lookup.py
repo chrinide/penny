@@ -2,6 +2,10 @@ import os
 import csv
 import sqlite3
 
+db_file = os.path.dirname(os.path.realpath(__file__)) + "/data/locs.db"
+conn = sqlite3.connect(db_file)
+#conn = sqlite3.connect(':memory:') # tempting, but no noticeable performance gain
+conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
 
 def get_connection():
     db_file = os.path.dirname(os.path.realpath(__file__)) + "/data/locs.db"
@@ -46,19 +50,19 @@ def db_has_data(conn):
 def get_places_by_type(place_name, place_type):
     place_name = str(place_name).strip().lower().title()
 
-    conn = get_connection()
+    #conn = get_connection()
     if not db_has_data(conn):
         populate_db(conn)
 
     cur = conn.cursor()
-    cur.execute('SELECT geoname_id FROM cities WHERE ' + place_type + ' = "' + place_name + '"')
+    cur.execute('SELECT geoname_id FROM cities WHERE ' + place_type + ' = "' + place_name + '" LIMIT 1')
     rows = cur.fetchall()
 
     if len(rows) > 0:
         return rows
 
     if len(place_name) == 2: #maybe it's an iso code
-        cur.execute('SELECT geoname_id FROM cities WHERE ' + place_type + ' = "' + place_name.upper() + '"')
+        cur.execute('SELECT geoname_id FROM cities WHERE ' + place_type + ' = "' + place_name.upper() + '" LIMIT 1')
         rows = cur.fetchall()
 
     if len(rows) > 0:

@@ -36,6 +36,7 @@ class InspectorsTest(unittest.TestCase):
     
     def test_rows_types_probabilties(self):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
+        
         fileobj = open(cur_dir + '/data/banklist.csv')
 
         rows = list(csv.reader(fileobj))
@@ -53,13 +54,14 @@ class InspectorsTest(unittest.TestCase):
 
         assert probs[2]['int'] > .9
         assert probs[3]['category'] > .9
-
+        
         fileobj = open(cur_dir + '/data/EGViolatorsFinal.csv','rU')
 
         rows = list(csv.reader(fileobj))
         probs = rows_types_probabilities(rows)
 
         assert probs[1]['date'] > .9
+        assert probs[8]['region'] > .9
 
 
     def test_categories_from_list(self):
