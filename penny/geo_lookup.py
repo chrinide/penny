@@ -2,10 +2,6 @@ import os
 import csv
 import sqlite3
 
-db_file = os.path.dirname(os.path.realpath(__file__)) + "/data/locs.db"
-conn = sqlite3.connect(db_file)
-#conn = sqlite3.connect(':memory:') # tempting, but no noticeable performance gain
-conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
 
 def get_connection():
     db_file = os.path.dirname(os.path.realpath(__file__)) + "/data/locs.db"
@@ -13,6 +9,11 @@ def get_connection():
     conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
 
     return conn
+
+
+# This is the module context so we don't need to establish a new connection 
+# for every method call.
+conn = get_connection()
 
 
 def populate_db(conn):
