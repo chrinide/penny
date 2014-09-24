@@ -8,7 +8,7 @@ except (IOError, ImportError):
    long_description = open('README.md').read()
 
 setup(name='penny',
-      version='0.2.0',
+      version='0.3.0',
       description='Inspect csv files and lists of data',
       long_description=long_description,
       url='https://github.com/gati/penny',
@@ -19,4 +19,7 @@ setup(name='penny',
       packages=['penny'],
       test_suite='tests',
       install_requires=['python-dateutil'],
+      package_data = {
+            'penny': ['data/*.csv'],
+      },
       zip_safe=False)
