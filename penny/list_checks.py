@@ -79,12 +79,17 @@ def id_probability(values, key=None, pos=None):
 def proportion_probability(values, key=None, pos=None):
     prob = 0
 
-    if sum(values) == 1 or sum(values) == 100:
-        prob += 0.50
+    if column_probability_for_type(values, 'int') == 1 or column_probability_for_type(values, 'float') == 1:
+
+        if sum(values) == 1 or sum(values) == 100:
+            prob += 1
+        else:
+            return 0
+
+        return prob
+
     else:
         return 0
-
-    return prob
 
 
 """The likelihood that a given list of values is a category. A category column
