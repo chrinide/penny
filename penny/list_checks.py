@@ -2,11 +2,11 @@ import itertools
 import math
 import collections
 from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
-    is_a_coord, is_a_coord_pair, is_a_country, is_a_city, is_a_region, 
+    is_a_coord, is_a_coord_pair, is_a_country, is_a_city, is_a_region,
     is_a_address)
 
 
-"""Guesses likelikhood that a column is of the requested type based on its 
+"""Guesses likelikhood that a column is of the requested type based on its
 values.
 
 :param values: a list of values (probably a column in a csv)
@@ -70,8 +70,24 @@ def id_probability(values, key=None, pos=None):
 
     return prob
 
+"""The likelihood that a given list of values is a proportion
 
-"""The likelihood that a given list of values is a category. A category column 
+:param values: a list of values to check
+:param key: the column header (optional)
+:param pos: the column position (optiona - eg 0 for the first column)
+"""
+def proportion_probability(values, key=None, pos=None):
+    prob = 0
+
+    if sum(values) == 1 or sum(values) == 100:
+        prob += 0.50
+    else:
+        return 0
+
+    return prob
+
+
+"""The likelihood that a given list of values is a category. A category column
 is assumed to have the following properties:
 
 - most of its rows are not empty
@@ -80,8 +96,8 @@ is assumed to have the following properties:
 - 80% of the rows should be assigned to at least one category label, or...
 - at least 10% of the rows must be assigned to one category label
 
-It's not perfect, but it usually finds columns that you'd want to group as 
-categories when further analyzing a dataset. 
+It's not perfect, but it usually finds columns that you'd want to group as
+categories when further analyzing a dataset.
 
 :param values: a list of values to check
 :param key: the column header (optional)
@@ -99,7 +115,7 @@ def category_probability(values, key=None, pos=None):
     if column_probability_for_type(values, 'date', pos=pos, key=key) > .5:
         return 0
 
-    # All category fields are 1 to many. If we detect a delimiter, split the 
+    # All category fields are 1 to many. If we detect a delimiter, split the
     # text field into a list. Otherwise treat the category as a list of 1
     delimiter = detect_delimiter(values)
     if delimiter:
@@ -109,20 +125,20 @@ def category_probability(values, key=None, pos=None):
         row_cats = [[x] for x in non_empty]
         all_cats = non_empty
 
-    
-    # at least 2% of the rows in the set must have any given value for it to 
+
+    # at least 2% of the rows in the set must have any given value for it to
     # be considered a possible category
     threshold = int(.02 * len(non_empty))
-    
+
     # number of categories
     matches = []
     failed_matches = []
-    
+
     # This prodcues a list of two-item lists, like [String, Integer], where
-    # String is the category label and Integer is the number of times that 
+    # String is the category label and Integer is the number of times that
     # value appears in the list
     for x,y in collections.Counter(all_cats).items():
-        # y > 1 for small datasets (like 25 rows) where 1 row is more than 
+        # y > 1 for small datasets (like 25 rows) where 1 row is more than
         # 2% of overall rows.
         if y > 1 and y > threshold:
             matches.append([x,y])
@@ -132,7 +148,7 @@ def category_probability(values, key=None, pos=None):
     if len(matches) == 0:
         return 0
 
-    # Determine the number of rows that have been assigned to at least one 
+    # Determine the number of rows that have been assigned to at least one
     # the values we determined to be a category using the 2% test above.
     total_categorized = 0
     total_uncategorized = 0
@@ -145,7 +161,7 @@ def category_probability(values, key=None, pos=None):
             total_uncategorized += 1
 
 
-    # If more than half the dataset isn't categorized based on this set of 
+    # If more than half the dataset isn't categorized based on this set of
     # labels, then it's probably not a category
 
     if float(total_uncategorized) / float(total_rows) >= .5:
@@ -163,10 +179,10 @@ def category_probability(values, key=None, pos=None):
         if prob >= 1:
             return 1
 
-        return prob 
+        return prob
 
 
-"""Finds the delimeter used to separate values in a string. This is for 
+"""Finds the delimeter used to separate values in a string. This is for
 category columns in a dataset like a,b,c or a/b/c
 
 :param values: list of values (probably a column from a csv)
@@ -181,7 +197,7 @@ def detect_delimiter(values):
         return None
 
     delimeters = [',','|','/']
-    
+
     # 50 is a wild guess, should be refined
     short_enough = [v for v in non_empty if len(v) < 50]
     if len(short_enough) < len(non_empty) / 2:
@@ -212,7 +228,7 @@ def detect_delimiter(values):
     variance = map(lambda x: (x - avg_word_length)**2, word_lengths)
     standard_deviation = math.sqrt(average(variance))
 
-    # this was probably a text field that used commas (or whatever) as part 
+    # this was probably a text field that used commas (or whatever) as part
     # of sentences.
     if standard_deviation > 6:
         return None
