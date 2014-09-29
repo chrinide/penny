@@ -1,5 +1,5 @@
 from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float, 
-    is_a_coord, is_a_coord_pair)
+    is_a_coord, is_a_coord_pair, is_a_city)
 from .list_checks import column_probability_for_type
 import collections
 from address import AddressParser
@@ -95,10 +95,19 @@ def address_parts_probabilities(values, num_rows=100):
     probs = { 'city': 0, 'state': 0, 'zip': 0 }
     max_rows = num_rows if num_rows < len_values - 1 else len_values - 1 
         
-    is_address = column_probability_for_type(values, 'address') > .5
-    if not is_address: return probs
+    if not column_probability_for_type(values[:max_rows], 'address') > .5:
+        return probs
 
     for v in values[:max_rows]:
+        if ',' not in v:
+            tokens = v.split(' ')
+            for i,token in enumerate(tokens):
+                if len(token) > 1 and is_a_city(token):
+                    tokens[i] = token + ','
+                    break
+
+            v = ' '.join(tokens)
+
         addr = ap.parse_address(v)
         for k in has.keys():
             if getattr(addr, k, None):
