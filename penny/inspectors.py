@@ -2,6 +2,7 @@ from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
     is_a_coord, is_a_coord_pair)
 from .list_checks import column_probability_for_type
 import collections
+from address import AddressParser
 
 """Takes a list of values and returns a type signature
 
@@ -77,6 +78,37 @@ def rows_types_probabilities(rows, headers=[], num_rows=100):
         types.append(column_types_probabilities(vals, **kwargs))
 
     return types
+
+
+
+"""Determine if a column is an address that can be separated into city, state, 
+and zipcode
+
+:param values: a list of values
+:param num_rows: max number of rows to test
+:returns a dict with city, state and zip probabilities
+"""
+def address_parts_probabilities(values, num_rows=100):
+    len_values = len(values)
+    ap = AddressParser()
+    has = { 'city': 0, 'state': 0, 'zip': 0 }
+    probs = { 'city': 0, 'state': 0, 'zip': 0 }
+    max_rows = num_rows if num_rows < len_values - 1 else len_values - 1 
+        
+    is_address = column_probability_for_type(values, 'address') > .5
+    if not is_address: return probs
+
+    for v in values[:max_rows]:
+        addr = ap.parse_address(v)
+        for k in has.keys():
+            if getattr(addr, k, None):
+                has[k] += 1
+
+    for k in probs.keys():
+        probs[k] = float(has[k]) / max_rows
+
+    return probs
+
 
 
 def categories_from_list(values):

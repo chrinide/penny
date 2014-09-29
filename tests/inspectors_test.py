@@ -1,7 +1,8 @@
 import unittest
 import csv
 from penny.inspectors import (rows_types_probabilities, row_simple_types,
-    categories_from_list, column_types_probabilities)
+    categories_from_list, column_types_probabilities, 
+    address_parts_probabilities)
 import os
 
 class InspectorsTest(unittest.TestCase):
@@ -62,6 +63,42 @@ class InspectorsTest(unittest.TestCase):
 
         assert probs[1]['date'] > .9
         assert probs[8]['region'] > .9
+
+
+    def test_address_parts_probabilities(self):
+        addresses = [
+            '123 Main St',
+            '456 Other St, Austin',
+            '555 Other St, Austin, TX',
+            '999 Another St, Austin, TX',
+            '888 Another St, Austin, TX',
+            '456788 Random Rd, Austin, TX'
+        ]
+
+        probs = address_parts_probabilities(addresses)
+
+        assert probs['city'] > .5
+        assert probs['state'] > .5
+        assert probs['zip'] == 0
+
+        addresses = [
+            'I am the very model of a modern major general',
+            'That is, like, so cool, with lots of commas and shit',
+            'And then! We dance',
+            '123 is my favorite sequence',
+            '999',
+            '95.456',
+            'TX',
+            'Ecuador',
+            'Austin, TX',
+            'Franklin, TX'
+        ]
+
+        probs = address_parts_probabilities(addresses)
+
+        assert probs['city'] < .5
+        assert probs['state'] < .5
+        assert probs['zip'] < .5
 
 
     def test_categories_from_list(self):
