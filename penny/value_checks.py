@@ -99,10 +99,10 @@ def is_a_coord(value, key=None, pos=None):
     if key and key in ['latitude', 'longitude'] and is_a_int(value):
         return True
 
-    if not is_a_int(value, key=key) or not is_a_float(value, key=key):
+    if not is_a_int(value, key=key) and not is_a_float(value, key=key):
         return False
 
-    if not len(str(value)) < 15:
+    if len(str(value)) > 15:
         return False
 
     if not abs(float(value)) <= 180:

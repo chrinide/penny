@@ -31,6 +31,7 @@ class ValueChecksTest(unittest.TestCase):
         assert is_a_coord("-179.123")
         assert is_a_coord(170, key='lng')
         assert not is_a_coord(150)
+        assert is_a_coord(32.8578872)
 
     def is_a_coord_pair(self):
         assert is_a_coord_pair("-37.123,148")
