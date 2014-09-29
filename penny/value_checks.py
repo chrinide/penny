@@ -35,6 +35,24 @@ def is_a_date(value, key=None):
         else:
             return False
 
+    if is_a_float(value, key):
+        keyl = str(key).lower()
+        if 'date' in keyl or 'time' in keyl:
+            return True
+
+        if float(value) < 0:
+            return False
+
+        """
+        This is iffy. Obviously it's totally possible to have infinitely 
+        precise measurements, but we're going to guess that if there are 
+        more numbers to the right of the decimal point than the left, we 
+        are probably dealing with a coordinate (or something)
+        """
+        pieces = str(value).split('.')
+        if len(pieces[1]) > len(pieces[0]):
+            return False
+
     return True
 
 
@@ -91,7 +109,7 @@ def is_a_coord(value, key=None, pos=None):
         return False
 
     # so we know we have a value that is between -180 and 180
-    key_names = ['lat', 'lon', 'lng', 'coords', 'coordinates']
+    key_names = ['lat', 'lon', 'lng', 'long', 'coords', 'coordinates']
     if key and any([k in key for k in key_names]):
         return True
 

@@ -20,6 +20,8 @@ class ValueChecksTest(unittest.TestCase):
     def test_is_a_date(self):
         assert not is_a_date('ST')
         assert is_a_date('31-May-13')
+        assert not is_a_date('-1479.2')
+        assert not is_a_date('78.12345')
 
     def is_a_coord(self):
         assert not is_a_coord(190)
