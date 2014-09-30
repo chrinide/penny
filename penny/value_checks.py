@@ -102,9 +102,6 @@ def is_a_coord(value, key=None, pos=None):
     if not is_a_int(value, key=key) and not is_a_float(value, key=key):
         return False
 
-    if len(str(value)) > 15:
-        return False
-
     if not abs(float(value)) <= 180:
         return False
 
@@ -186,6 +183,30 @@ def is_a_region(value, key=None, pos=None):
 
 def is_a_country(value, key=None, pos=None):
     return is_a_place(value, 'country', key=key)
+
+
+def is_a_zip(value, key=None, pos=None):
+    if key:
+        key = str(key).lower().strip()
+
+    if key and key in ['zip', 'zipcode', 'postal code']:
+        return True
+
+    if '-' in str(value):
+        if len(value) == 10:
+            return True
+
+        primary = str(value).split('-')[0]
+    else:
+        primary = value
+
+    if not is_a_int(value):
+        return False
+
+    if len(str(value)) == 5 and int(value) > 499:
+        return True
+
+    return False
 
 
 def is_a_address(value, key=None, pos=None):

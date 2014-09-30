@@ -23,17 +23,16 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_date('-1479.2')
         assert not is_a_date('78.12345')
 
-    def is_a_coord(self):
+    def test_is_a_coord(self):
         assert not is_a_coord(190)
         assert not is_a_coord('hello!')
-        assert not is_a_coord(179.999999999999999999123123)
         assert is_a_coord("78.1")
         assert is_a_coord("-179.123")
         assert is_a_coord(170, key='lng')
         assert not is_a_coord(150)
         assert is_a_coord(32.8578872)
 
-    def is_a_coord_pair(self):
+    def test_is_a_coord_pair(self):
         assert is_a_coord_pair("-37.123,148")
         assert is_a_coord_pair("180,89.1234")
         assert is_a_coord_pair("-37.123|148")
@@ -45,32 +44,40 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_coord_pair("-181.23,45")
         assert not is_a_coord_pair("91,91")
 
-    def is_a_city(self):
+    def test_is_a_city(self):
         assert is_a_city('Cleveland')
         assert is_a_city('nairobi')
         assert is_a_city('LONDON')
-        assert not is_a_city('Belgium')
+        assert not is_a_city('France')
 
-    def is_a_region(self):
+    def test_is_a_region(self):
         assert is_a_region('Ohio')
         assert is_a_region('Ontario')
         assert is_a_region('WA')
         assert is_a_region('montana')
         assert not is_a_region('murica')
 
-    def is_a_country(self):
+    def test_is_a_country(self):
         assert is_a_country('United States')
         assert is_a_country('France')
         assert is_a_country('GERMANY')
         assert not is_a_country('murica')
 
-    def is_a_address(self):
+    def test_is_a_address(self):
         assert is_a_address("123 Main Street")
         assert is_a_address("100 Congress Ave, Austin, 78701")
         assert is_a_address("Leister Square, London, UK")
         assert not is_a_address("Four score and seven years ago, blah blah")
         assert not is_a_address("125")
         assert not is_a_address("$99")
+
+    def test_is_a_zip(self):
+        assert is_a_zip("12345")
+        assert is_a_zip("90210")
+        assert is_a_zip("12345-9999")
+        assert not is_a_zip("00010")
+        assert not is_a_zip("100")
+        assert not is_a_zip("00499")
 
 
 def main():
