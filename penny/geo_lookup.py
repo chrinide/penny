@@ -50,8 +50,12 @@ def db_has_data(conn):
 
 def get_places_by_type(place_name, place_type):
     place_name = str(place_name).strip().lower().title()
+    
+    try:
+        conn = conn
+    except:
+        conn = get_connection()
 
-    #conn = get_connection()
     if not db_has_data(conn):
         populate_db(conn)
 
