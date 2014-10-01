@@ -152,6 +152,10 @@ def is_a_place(value, place_type, key=None):
 
     value = str(value).strip()
 
+    non_addrs = ['|','/','?','!','@','$','%']
+    if len([na for na in non_addrs if na in value]) > 0:
+        return False
+
     # If your country's name is longer than 40 characters, you're doing 
     # something wrong.
     if len(value) > 40:
@@ -208,7 +212,7 @@ def is_a_zip(value, key=None, pos=None):
 
     return False
 
-
+ap = AddressParser()
 def is_a_address(value, key=None, pos=None):
     if not is_a_str(value):
         return False
@@ -218,7 +222,6 @@ def is_a_address(value, key=None, pos=None):
     if len(value) > 80:
         return False
 
-    ap = AddressParser()
     address = ap.parse_address(value)
 
     keys = [

@@ -49,7 +49,7 @@ def db_has_data(conn):
 
 
 def get_places_by_type(place_name, place_type):
-    place_name = str(place_name).strip().lower().title()
+    place_name = str(place_name).strip().lower().title().replace('"','')
     
     try:
         conn = conn
