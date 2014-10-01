@@ -114,17 +114,23 @@ def is_a_coord(value, key=None, pos=None):
 
 
 def is_a_coord_pair(value, key=None, pos=None):
-    delimeters = [',','|','/',' ']
-    possible_matches = [d for d in delimeters if d in str(value).strip()]
+    delimeters = [',','|','/']
+    disallowed = "(){}[]"
+
+    value = str(value).strip()
+    possible_matches = [d for d in delimeters if d in value]
     
     # if more than one of these is present or none of them, than this isn't 
     # a pair
     if len(possible_matches) != 1:
         return False
 
+    # Get rid of weird shit people put in coord pair columns
+    value = value.translate(None, disallowed)
+
     delimiter = possible_matches[0]
-    
     possible_cords = value.split(delimiter)
+    
     if len(possible_cords) != 2:
         return False
 

@@ -35,6 +35,25 @@ class ListChecksTest(unittest.TestCase):
         assert delim == None
 
 
+    def test_column_probability_for_type(self):
+        cur_dir = os.path.dirname(os.path.realpath(__file__))
+        fileobj = open(cur_dir + '/data/chicago_homicides.csv')
+        rows = list(csv.reader(fileobj))
+
+        prob = column_probability_for_type(map(lambda x: x[19], rows[1:]), 
+                    'coord', key='Latitude')
+
+        prob2 = column_probability_for_type(map(lambda x: x[20], rows[1:]), 
+                    'coord', key='Longitude')
+
+        prob3 = column_probability_for_type(map(lambda x: x[21], rows[1:]), 
+                    'coord_pair', key='Location')
+
+        assert prob > .7
+        assert prob2 > .7
+        assert prob3 > .7
+
+
     def test_category_probability(self):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
 
