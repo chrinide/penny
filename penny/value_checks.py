@@ -3,7 +3,7 @@ from geo_lookup import get_places_by_type
 from address import AddressParser
 
 def is_a_bool(value, key=None):
-    bool_words = ['y,yes,n,no,true,false,t,f,on,off']
+    bool_words = ['y','yes','n','no','true','false','t','f','on','off']
     return value.lower().strip() in bool_words
 
 
