@@ -201,7 +201,7 @@ def detect_delimiter(values):
     if len(non_empty) < len(values) / 2:
         return None
 
-    delimeters = [',','|','/']
+    delimiters = [',','|','/']
 
     # 50 is a wild guess, should be refined
     short_enough = [v for v in non_empty if len(v) < 50]
@@ -209,15 +209,15 @@ def detect_delimiter(values):
         return None
 
     # number of records with each type of delimiter
-    delimeter_count = [0] * len(delimeters)
-    for i,d in enumerate(delimeters):
+    delimeter_count = [0] * len(delimiters)
+    for i,d in enumerate(delimiters):
         delimeter_count[i] = len([v for v in non_empty if d in v])
 
     # if more than half the records contain one type of delimeter, it wins
     possible_delimeters = []
     for i,dc in enumerate(delimeter_count):
         if dc > len(non_empty) / 2:
-            possible_delimeters.append(delimeters[i])
+            possible_delimeters.append(delimiters[i])
 
     if len(possible_delimeters) != 1:
         return None
