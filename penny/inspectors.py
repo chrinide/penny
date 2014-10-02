@@ -46,6 +46,7 @@ def column_types_probabilities(values, types=[], pos=None, key=None):
         'city',
         'region',
         'zipcode',
+        'phone',
         'country',
         'address',
         'text',

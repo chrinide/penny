@@ -18,7 +18,7 @@ setup(name='penny',
       license='MIT',
       packages=['penny'],
       test_suite='tests',
-      install_requires=['python-dateutil','address'],
+      install_requires=['python-dateutil','address','phonenumbers'],
       package_data = {
             'penny': ['data/*.csv'],
       },

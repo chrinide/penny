@@ -1,6 +1,8 @@
 from dateutil.parser import parse
 from geo_lookup import get_places_by_type
 from address import AddressParser
+import phonenumbers
+import re
 
 def is_a_bool(value, key=None):
     bool_words = ['y','yes','n','no','true','false','t','f','on','off']
@@ -281,3 +283,31 @@ def is_a_address(value, key=None, pos=None):
                 return True
 
     return False
+
+
+def is_a_phone(value, key=None, pos=None):
+    value = str(value).strip()
+
+    if len(value) > 20:
+        return False
+
+    """Check for international numbers"""
+    if value.startswith('+'):
+        try:
+            phonenumbers.parse(value)
+            return True
+        except:
+            return False
+
+    """Otherwise let's hope it's a US number"""
+    reg = re.compile(".*?(\(?\d{3}\D{0,3}\d{3}\D{0,3}\d{4}).*?", re.S)
+    matches = reg.search(value)
+
+    """We're not looking for text fields that contain phone numbers, only fields 
+    that are dedicated to phone number"""
+    if matches and len(matches.group(1)) == len(value):
+        return True
+
+
+    return False
+

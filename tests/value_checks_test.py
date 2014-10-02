@@ -88,6 +88,17 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_zip("00499")
 
 
+    def test_is_a_phone(self):
+        assert is_a_phone('+44 (20) 83 66 1177')
+        assert is_a_phone('+442083661177')
+        assert is_a_phone('512-867-5309')
+        assert is_a_phone('5128675309')
+        assert is_a_phone('512.867.5309')
+        assert not is_a_phone("93")
+        assert not is_a_phone("12345678999")
+        assert not is_a_phone("the-big-blue")
+
+
     def is_a_text(self):
         assert is_a_text('I am the very model of a modern major general, I have information vegetable animal and mineral.')
         assert not is_a_text('100 Congress Ave, Austin Texas 78745 United States')
