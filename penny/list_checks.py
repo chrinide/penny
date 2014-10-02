@@ -3,7 +3,7 @@ import math
 import collections
 from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
     is_a_coord, is_a_coord_pair, is_a_country, is_a_city, is_a_region,
-    is_a_address, is_a_text, is_a_zip)
+    is_a_address, is_a_text, is_a_zip, is_a_street)
 
 
 """Guesses likelikhood that a column is of the requested type based on its
@@ -31,6 +31,7 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
         'float': is_a_float,
         'coord': is_a_coord,
         'coord_pair': is_a_coord_pair,
+        'street': is_a_street,
         'city': is_a_city,
         'region': is_a_region,
         'zipcode': is_a_zip,

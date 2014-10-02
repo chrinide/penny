@@ -42,6 +42,7 @@ def column_types_probabilities(values, types=[], pos=None, key=None):
         'id',
         'coord',
         'coord_pair',
+        'street',
         'city',
         'region',
         'zipcode',
