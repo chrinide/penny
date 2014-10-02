@@ -225,15 +225,16 @@ def is_a_zip(value, key=None, pos=None):
 
     return False
 
+
 ap = AddressParser()
-def is_a_address(value, key=None, pos=None):
+def address_pieces(value):
     if not is_a_str(value):
-        return False
+        return [], None
 
     value = str(value).strip()
 
     if len(value) > 80:
-        return False
+        return [], None
 
     address = ap.parse_address(value)
 
@@ -245,9 +246,38 @@ def is_a_address(value, key=None, pos=None):
         'state'
     ]
 
-    has = [key for key in keys if getattr(address, key, None)]
+    return [key for key in keys if getattr(address, key, None)], address
 
+
+"""Check if a string is a house number + street name. The street part of an 
+address. Note that we return false if this is a more complete address. """
+def is_a_street(value, key=None, pos=None):
+    has,address = address_pieces(value)
+
+    if len(has) == 2 and 'house_number' in has and 'street' in has:
+        return not is_a_address(value)
+    else:
+        return False
+
+
+"""Check to see if this is enough of an address that it could be geocoded. So 
+has at least a city + state, or at least street + city"""
+def is_a_address(value, key=None, pos=None):
+    has,address = address_pieces(value)
+    
     if len(has) >= 2:
-        return True
+        if getattr(address, 'city', None):
+            return True
+        
+        pieces = value.split(' ')
+        if len(pieces) > 2:
+            """Sometimes we get an address like 100 Congress Austin TX, so let's 
+            take a stab at breaking up the city/state in a way AddressParser 
+            might understand"""
+            pieces[len(pieces) - 2] = pieces[len(pieces) - 2] + ','
+
+            has,address = address_pieces(' '.join(pieces))
+            if len(has) > 2 and getattr(address, 'city', None):
+                return True
 
     return False

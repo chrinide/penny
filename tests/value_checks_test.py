@@ -64,12 +64,20 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_country('murica')
 
     def test_is_a_address(self):
-        assert is_a_address("123 Main Street")
         assert is_a_address("100 Congress Ave, Austin, 78701")
         assert is_a_address("Leister Square, London, UK")
+        # We want to treat this as a street, not a full address
+        assert not is_a_address("123 Main Street")
         assert not is_a_address("Four score and seven years ago, blah blah")
         assert not is_a_address("125")
         assert not is_a_address("$99")
+
+    def test_is_a_street(self):
+        assert is_a_street("123 Main St")
+        assert is_a_street("100 Congress")
+        assert not is_a_street("Austin, TX")
+        assert not is_a_street("100 Congress Ave Austin TX")
+        assert not is_a_street("Whoa dude")
 
     def test_is_a_zip(self):
         assert is_a_zip("12345")
