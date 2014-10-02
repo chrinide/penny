@@ -45,7 +45,9 @@ def column_types_probabilities(values, types=[], pos=None, key=None):
         'city',
         'region',
         'country',
-        'address'
+        'address',
+        'text',
+        'proportion'
     ]
 
     types_to_check = types or all_types

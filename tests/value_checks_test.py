@@ -80,6 +80,11 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_zip("00499")
 
 
+    def is_a_text(self):
+        assert is_a_text('I am the very model of a modern major general, I have information vegetable animal and mineral.')
+        assert not is_a_text('100 Congress Ave, Austin Texas 78745 United States')
+
+
 def main():
     unittest.main()
 

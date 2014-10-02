@@ -3,7 +3,7 @@ import math
 import collections
 from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
     is_a_coord, is_a_coord_pair, is_a_country, is_a_city, is_a_region,
-    is_a_address)
+    is_a_address, is_a_text)
 
 
 """Guesses likelikhood that a column is of the requested type based on its
@@ -18,9 +18,11 @@ values.
 """
 def column_probability_for_type(values, for_type, pos=None, key=None):
     if for_type == 'category':
-        return category_probability(values)
+        return category_probability(values, key=key, pos=pos)
     elif for_type == 'id':
-        return id_probability(values)
+        return id_probability(values, key=key, pos=pos)
+    elif for_type == 'proportion':
+        return proportion_probability(values, key=key)
 
     type_checkers = {
         'date': is_a_date,
@@ -32,7 +34,8 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
         'city': is_a_city,
         'region': is_a_region,
         'country': is_a_country,
-        'address': is_a_address
+        'address': is_a_address,
+        'text': is_a_text
     }
 
     is_type = 0
@@ -77,19 +80,17 @@ def id_probability(values, key=None, pos=None):
 :param pos: the column position (optiona - eg 0 for the first column)
 """
 def proportion_probability(values, key=None, pos=None):
-    prob = 0
-
-    if column_probability_for_type(values, 'int') == 1 or column_probability_for_type(values, 'float') == 1:
-
-        if sum(values) == 1 or sum(values) == 100:
-            prob += 1
-        else:
-            return 0
-
-        return prob
-
+    if column_probability_for_type(values, 'int') == 1:
+        values = [int(v) for v in values]
+    elif column_probability_for_type(values, 'float') == 1:
+        values = [float(v) for v in values]
     else:
         return 0
+
+    if sum(values) == 1 or sum(values) == 100:
+        return 1
+
+    return 0
 
 
 """The likelihood that a given list of values is a category. A category column
@@ -226,7 +227,7 @@ def detect_delimiter(values):
 
     def average(s): return sum(s) * 1.0 / len(s)
 
-    # get average worth length and standard deviation
+    # get average word length and standard deviation
     categories = list(itertools.chain.from_iterable([i.split(delimiter) for i in non_empty]))
     word_lengths = [len(w) for w in categories]
     avg_word_length = average(word_lengths)

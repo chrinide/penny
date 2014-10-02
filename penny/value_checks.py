@@ -88,6 +88,13 @@ def is_a_str(value, key=None):
     return True
 
 
+def is_a_text(value, key=None):
+    if not is_a_str(value, key=key):
+        return False
+
+    return len(str(value).strip()) > 90
+
+
 """Geospatial checks. Looks for coordinates, coordinate pairs, address strings, 
 geo text (like country, state, city), zip codes, etc etc. Basically anything 
 you might want to geocode or treat as a point. """
