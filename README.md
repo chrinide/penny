@@ -77,10 +77,13 @@ Here's the list (for now):
 - **int** a whole number 
 - **bool** y/n or yes/no or something true/falsey 
 - **float** a number with a decimal
-- **category** something you might want to group records by 
+- **category** something you might want to group records by
+- **text** string longer than 90 characters (something you could get names/places/sentiment/etc from) 
 - **id** unique for each row
 - **coord** a float that might be a latitude or longitude
 - **coord_pair** string that looks like "coord,coord"
+- **proportion** column where all values sum to 1 or 100
+- **street** house number + street name
 - **city** one of the world's 80,000 largest cities
 - **region** smaller than a country, bigger than a city. state, province, etc
 - **country** a country name on the [ISO 3166 list](http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
