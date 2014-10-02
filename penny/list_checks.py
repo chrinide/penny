@@ -83,9 +83,15 @@ def id_probability(values, key=None, pos=None):
 """
 def proportion_probability(values, key=None, pos=None):
     if column_probability_for_type(values, 'int') == 1:
-        values = [int(v) for v in values]
+        try:
+            values = [int(v) for v in values]
+        except:
+            return 0
     elif column_probability_for_type(values, 'float') == 1:
-        values = [float(v) for v in values]
+        try:
+            values = [float(v) for v in values]
+        except:
+            return 0
     else:
         return 0
 
