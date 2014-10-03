@@ -8,11 +8,11 @@ except (IOError, ImportError):
    long_description = open('README.md').read()
 
 setup(name='penny',
-      version='0.3.5',
+      version='0.3.6',
       description='Inspect your data. Find the truth!',
       long_description=long_description,
       url='https://github.com/gati/penny',
-      download_url ='https://github.com/gati/penny/tarball/0.3.5',
+      download_url ='https://github.com/gati/penny/tarball/0.3.6',
       author='Jonathon Morgan',
       author_email='jonathon@goodattheinternet.com',
       license='MIT',
