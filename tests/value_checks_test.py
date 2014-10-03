@@ -112,7 +112,17 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_email('123 Main St')
         assert not is_a_email('google.com')
         assert not is_a_email('http://google.com')
-        
+
+
+    def test_is_a_url(self):
+        assert is_a_url('http://google.com')
+        assert is_a_url('google.com')
+        assert is_a_url('google.net')
+        assert is_a_url('google.co')
+        assert is_a_url('google.co.uk')
+        assert not is_a_url('google.com is my favorite')
+        assert not is_a_url('i love google.com')
+        assert not is_a_url('Google. Completely false.')
 
 def main():
     unittest.main()

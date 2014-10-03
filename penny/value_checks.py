@@ -330,3 +330,22 @@ def is_a_email(value, key=None, pos=None):
 
     return False
 
+
+def is_a_url(value, key=None, pos=None):
+    # blatantly ripped from Django
+    regex = re.compile(
+        r'(^https?://)?'  # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?'  # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+    value = str(value).strip()
+    m = regex.search(value)
+
+    if not m:
+        return False
+
+    return len(m.group(0)) == len(value)
+
