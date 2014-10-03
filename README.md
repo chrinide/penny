@@ -87,6 +87,9 @@ Here's the list (for now):
 - **city** one of the world's 80,000 largest cities
 - **region** smaller than a country, bigger than a city. state, province, etc
 - **country** a country name on the [ISO 3166 list](http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
+- **phone** a phone number
+- **email** an email address
+- **url** web address with or without http:// (so http://google.com or google.com)
 - **address** a full address you could geocode with a service like Google Maps
 
 Last but not least, you can also inspect a column for a single type.
