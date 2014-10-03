@@ -9,7 +9,7 @@ except (IOError, ImportError):
 
 setup(name='penny',
       version='0.3.5',
-      description='Inspect csv files and lists of data',
+      description='Inspect your data. Find the truth!',
       long_description=long_description,
       url='https://github.com/gati/penny',
       download_url ='https://github.com/gati/penny/tarball/0.3.5',

@@ -99,10 +99,20 @@ class ValueChecksTest(unittest.TestCase):
         assert not is_a_phone("the-big-blue")
 
 
-    def is_a_text(self):
+    def test_is_a_text(self):
         assert is_a_text('I am the very model of a modern major general, I have information vegetable animal and mineral.')
         assert not is_a_text('100 Congress Ave, Austin Texas 78745 United States')
 
+
+    def test_is_a_email(self):
+        assert is_a_email('something@something.com')
+        assert is_a_email('Something <something@something.com>')
+        assert not is_a_email('Dude')
+        assert not is_a_email('.@jonathonmorgan is the best Twitter account')
+        assert not is_a_email('123 Main St')
+        assert not is_a_email('google.com')
+        assert not is_a_email('http://google.com')
+        
 
 def main():
     unittest.main()

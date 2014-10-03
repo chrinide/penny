@@ -1,6 +1,7 @@
 from dateutil.parser import parse
 from geo_lookup import get_places_by_type
 from address import AddressParser
+from email.utils import parseaddr
 import phonenumbers
 import re
 
@@ -308,6 +309,24 @@ def is_a_phone(value, key=None, pos=None):
     if matches and len(matches.group(1)) == len(value):
         return True
 
+
+    return False
+
+
+def is_a_email(value, key=None, pos=None):
+    value = str(value).strip()
+
+    possible = parseaddr(value)
+    if possible[1] == '':
+        return False
+    
+    e = re.compile(r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}')
+    m = e.search(possible[1])
+    if not m:
+        return False
+
+    if len(m.group(0)) == len(possible[1]):
+        return True
 
     return False
 

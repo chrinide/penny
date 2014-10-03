@@ -36,6 +36,7 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
         'region': is_a_region,
         'zipcode': is_a_zip,
         'phone': is_a_phone,
+        'email': is_a_email,
         'country': is_a_country,
         'address': is_a_address,
         'text': is_a_text
