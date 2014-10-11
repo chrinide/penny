@@ -1,9 +1,6 @@
 from dateutil.parser import parse
 from geo_lookup import get_places_by_type
 from address import AddressParser
-from email.utils import parseaddr
-import phonenumbers
-import re
 
 def is_a_bool(value, key=None):
     bool_words = ['y','yes','n','no','true','false','t','f','on','off']
@@ -72,6 +69,9 @@ def is_a_float(value, key=None):
 
 def is_a_int(value, key=None):
     if is_a_float(value):
+        return False
+
+    if is_a_zip(value, key=key):
         return False
 
     try:
@@ -220,10 +220,13 @@ def is_a_zip(value, key=None, pos=None):
     else:
         primary = value
 
-    if not is_a_int(value):
+
+    try:
+        primary = int(primary)
+    except:
         return False
 
-    if len(str(value)) == 5 and int(value) > 499:
+    if len(str(primary)) == 5 and int(primary) > 499:
         return True
 
     return False
@@ -284,68 +287,3 @@ def is_a_address(value, key=None, pos=None):
                 return True
 
     return False
-
-
-def is_a_phone(value, key=None, pos=None):
-    value = str(value).strip()
-
-    if len(value) > 20:
-        return False
-
-    """Check for international numbers"""
-    if value.startswith('+'):
-        try:
-            phonenumbers.parse(value)
-            return True
-        except:
-            return False
-
-    """Otherwise let's hope it's a US number"""
-    reg = re.compile(".*?(\(?\d{3}\D{0,3}\d{3}\D{0,3}\d{4}).*?", re.S)
-    matches = reg.search(value)
-
-    """We're not looking for text fields that contain phone numbers, only fields 
-    that are dedicated to phone number"""
-    if matches and len(matches.group(1)) == len(value):
-        return True
-
-
-    return False
-
-
-def is_a_email(value, key=None, pos=None):
-    value = str(value).strip()
-
-    possible = parseaddr(value)
-    if possible[1] == '':
-        return False
-    
-    e = re.compile(r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}')
-    m = e.search(possible[1])
-    if not m:
-        return False
-
-    if len(m.group(0)) == len(possible[1]):
-        return True
-
-    return False
-
-
-def is_a_url(value, key=None, pos=None):
-    # blatantly ripped from Django
-    regex = re.compile(
-        r'(^https?://)?'  # http:// or https://
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
-        r'localhost|'  # localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-        r'(?::\d+)?'  # optional port
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-
-    value = str(value).strip()
-    m = regex.search(value)
-
-    if not m:
-        return False
-
-    return len(m.group(0)) == len(value)
-
