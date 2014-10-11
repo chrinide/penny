@@ -215,14 +215,10 @@ def is_a_zip(value, key=None, pos=None):
     if key and key in ['zip', 'zipcode', 'postal code']:
         return True
 
-    if '-' in str(value):
-        if len(value) == 10:
-            return True
-
+    if str(value).count('-') == 1 and len(str(value)) == 10:
         primary = str(value).split('-')[0]
     else:
         primary = value
-
 
     try:
         primary = int(primary)
