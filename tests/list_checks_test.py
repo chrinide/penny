@@ -82,7 +82,7 @@ class ListChecksTest(unittest.TestCase):
         check_cats('banklist.csv', yes=[2], no=[0,1,3,4,5])
         
         # test_csv
-        check_cats('test_csv.csv', yes=[3,4,5,8,9], no=[0,1,2,6,7])
+        check_cats('test_csv.csv', yes=[3,5,8,9], no=[0,1,2,4,6,7])
 
         # channing
         check_cats('channing.csv', yes=[6,2], no=[0,1,3,4,5])
@@ -97,7 +97,7 @@ class ListChecksTest(unittest.TestCase):
         check_cats('mps_tanzania.csv', yes=[1,8], no=[0,2,3,4,5,6,7,9])
 
         # listofdeath.csv
-        check_cats('listofdeath.csv', yes=[5,1,3], no=[0,2,4,6,7,8,9,10,11])
+        check_cats('listofdeath.csv', yes=[5,1], no=[0,2,3,4,6,7,8,9,10,11])
 
         # EGViolatorsFinal.csv
         check_cats('EGViolatorsFinal.csv', yes=[0,3,4,5,6,7,8], no=[1,2,9])

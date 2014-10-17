@@ -16,10 +16,12 @@ def row_simple_types(row):
             types.append('date')
         elif is_a_float(col):
             types.append('float')
-        elif is_a_int(col):
-            types.append('int')
         else:
-            types.append('str')
+            try:
+                int_col = int(col)
+                types.append('int')
+            except:
+                types.append('str')
 
     return types
 

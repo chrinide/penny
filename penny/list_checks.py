@@ -193,7 +193,14 @@ def category_probability(values, key=None, pos=None):
         return 0
     else:
         tu = total_uncategorized if total_uncategorized > 0 else 1
+
         prob = float(total_categorized) / float(tu)
+        uncategorized_ratio = float(tu) / float(total_categorized)
+
+        print uncategorized_ratio
+        if uncategorized_ratio > .5:
+            return 0
+
         if prob >= 1:
             return 1
 
