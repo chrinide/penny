@@ -179,6 +179,13 @@ def category_probability(values, key=None, pos=None):
             total_uncategorized += 1
 
 
+    # If this is a bunch of numbers, it's probably not a category
+    if all([is_a_int(v) or is_a_float(v) for v in values]) and \
+            len(all_matches) > math.sqrt(total_rows) / 2:
+
+        return 0 
+
+
     # If more than half the dataset isn't categorized based on this set of
     # labels, then it's probably not a category
 

@@ -94,7 +94,7 @@ class ListChecksTest(unittest.TestCase):
         check_cats('nosdra_2014-07-07_10_25_35UTC_filtered.csv', yes=[2,5,4], no=[0,1,3])
         
         # mps_tanzania
-        check_cats('mps_tanzania.csv', yes=[1,8], no=[0,2,3,4,5,6,7,9])
+        check_cats('mps_tanzania.csv', yes=[1], no=[0,2,3,4,5,6,7,8,9])
 
         # listofdeath.csv
         check_cats('listofdeath.csv', yes=[5,1], no=[0,2,3,4,6,7,8,9,10,11])
