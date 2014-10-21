@@ -54,6 +54,15 @@ class ListChecksTest(unittest.TestCase):
         assert prob3 > .7
 
 
+
+    def test_ordinal_probability(self):
+        assert ordinal_probability([1,1,1,1,2,4,3,6,5,8,7,9,10]) == 1
+
+
+    def test_bool_probability(self):
+        assert bool_probability([1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0]) == 1
+
+
     def test_category_probability(self):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
 

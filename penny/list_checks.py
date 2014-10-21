@@ -24,6 +24,10 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
         return id_probability(values, key=key, pos=pos)
     elif for_type == 'proportion':
         return proportion_probability(values, key=key)
+    elif for_type == 'ordinal':
+        return ordinal_probability(values, key=key)
+    elif for_type == 'bool' and column_probability_for_type(values, 'int') == 1:
+        return bool_probability(values, key=key)
 
     type_checkers = {
         'date': is_a_date,
@@ -79,6 +83,7 @@ def id_probability(values, key=None, pos=None):
 
     return prob
 
+
 """The likelihood that a given list of values is a proportion
 
 :param values: a list of values to check
@@ -103,6 +108,50 @@ def proportion_probability(values, key=None, pos=None):
         return 1
 
     return 0
+
+
+def ordinal_probability(values, key=None, pos=None):
+    if column_probability_for_type(values, 'int') == 1:
+        try:
+            values = [int(v) for v in values]
+        except:
+            return 0
+    elif column_probability_for_type(values, 'float') == 1:
+        try:
+            values = [float(v) for v in values]
+        except:
+            return 0
+    else:
+        return 0
+
+    values = list(set(sorted(values)))
+    diffs = [x[1]-x[0] for x in zip(values[1:],values[:-1])]
+    if len(set(diffs)) == 1:
+        return 1
+
+    elif len(set(diffs)) == 2:
+        return .75
+
+    elif len(set(diffs)) == 3:
+        return .5
+
+    else:
+        return 0
+
+
+def bool_probability(values, key=None, pos=None):
+    if column_probability_for_type(values, 'int') == 1:
+        try:
+            values = [int(v) for v in values]
+        except:
+            return 0
+    else:
+        return 0
+
+    if all([i == 0 or i == 1 for i in values]):
+        return 1
+    else:
+        return 0
 
 
 """The likelihood that a given list of values is a category. A category column
