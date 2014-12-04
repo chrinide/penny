@@ -4,7 +4,7 @@ import collections
 from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
     is_a_coord, is_a_coord_pair, is_a_country, is_a_city, is_a_region,
     is_a_address, is_a_text, is_a_zip, is_a_street, is_a_phone, is_a_url, 
-    is_a_email)
+    is_a_email, is_a_str)
 
 
 """Guesses likelikhood that a column is of the requested type based on its
@@ -68,6 +68,9 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
 """
 def id_probability(values, key=None, pos=None):
     prob = 0
+
+    if any([isinstance(v, list) for v in values]):
+        return 0
 
     if len(values) == len(set(values)):
         prob += 0.25
@@ -172,7 +175,7 @@ categories when further analyzing a dataset.
 """
 def category_probability(values, key=None, pos=None):
     total_rows = len(values)
-    non_empty = [r.strip() for r in values if r.strip() != '']
+    non_empty = [str(r).strip() for r in values if str(r).strip() != '']
 
     # If this is a mostly empty rows, we don't want to use it
     if len(non_empty) < len(values) / 2:
@@ -181,6 +184,15 @@ def category_probability(values, key=None, pos=None):
     # If this is a date field, we don't treat it as a category
     if column_probability_for_type(values, 'date', pos=pos, key=key) > .5:
         return 0
+
+    # Special case. Every value is a unique string, and overall number of rows 
+    # is small. We want to treat this as a category
+    if total_rows == len(list(set(non_empty))) and \
+        all([is_a_str(val) for val in non_empty]) and \
+        total_rows <= 25:
+
+        return 1
+
 
     # All category fields are 1 to many. If we detect a delimiter, split the
     # text field into a list. Otherwise treat the category as a list of 1
@@ -280,14 +292,14 @@ def detect_delimiter(values):
     delimiters = [',','|','/']
 
     # 50 is a wild guess, should be refined
-    short_enough = [v for v in non_empty if len(v) < 50]
+    short_enough = [v for v in non_empty if len(str(v)) < 50]
     if len(short_enough) < len(non_empty) / 2:
         return None
 
     # number of records with each type of delimiter
     delimeter_count = [0] * len(delimiters)
     for i,d in enumerate(delimiters):
-        delimeter_count[i] = len([v for v in non_empty if d in v])
+        delimeter_count[i] = len([v for v in non_empty if d in str(v)])
 
     # if more than half the records contain one type of delimeter, it wins
     possible_delimeters = []

@@ -7,7 +7,7 @@ import re
 
 def is_a_bool(value, key=None):
     bool_words = ['y','yes','n','no','true','false','t','f','on','off']
-    return value.lower().strip() in bool_words
+    return str(value).lower().strip() in bool_words
 
 
 def is_a_date(value, key=None):
@@ -15,7 +15,7 @@ def is_a_date(value, key=None):
     Dateutil recognizes some letter combinations as dates, which is almost 
     always something that isn't really a date (like a US state abbreviation)
     """
-    if not any(char.isdigit() for char in value):
+    if not any(char.isdigit() for char in str(value)):
         return False
 
     try:
