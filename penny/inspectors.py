@@ -36,7 +36,8 @@ def row_simple_types(row):
 """
 def column_types_probabilities(values, types=[], pos=None, key=None):
     all_types = [
-        'date', 
+        'date',
+        'time', 
         'int', 
         'bool', 
         'float', 

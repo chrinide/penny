@@ -22,6 +22,12 @@ class ValueChecksTest(unittest.TestCase):
         assert is_a_date('31-May-13')
         assert not is_a_date('-1479.2')
         assert not is_a_date('78.12345')
+        assert not is_a_date('12:30:00')
+
+    def test_is_a_time(self):
+        assert is_a_time('12:30:00')
+        assert is_a_time('12:30')
+        assert not is_a_time('May 31 2014 12:30:00')
 
     def test_is_a_coord(self):
         assert not is_a_coord(190)

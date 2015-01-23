@@ -4,10 +4,23 @@ from address import AddressParser
 from email.utils import parseaddr
 import phonenumbers
 import re
+import time
 
 def is_a_bool(value, key=None):
     bool_words = ['y','yes','n','no','true','false','t','f','on','off']
     return str(value).lower().strip() in bool_words
+
+
+def is_a_time(value,key=None):
+    try:
+        time.strptime(value, '%H:%M')
+        return True
+    except ValueError:
+        try:
+            time.strptime(value, '%H:%M:%S')
+            return True
+        except ValueError:
+            return False
 
 
 def is_a_date(value, key=None):
@@ -21,6 +34,9 @@ def is_a_date(value, key=None):
     try:
         pos_date = parse(value)
     except:
+        return False
+
+    if is_a_time(value,key=key):
         return False
 
     """ 

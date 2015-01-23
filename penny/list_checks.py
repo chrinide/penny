@@ -4,7 +4,7 @@ import collections
 from .value_checks import (is_a_date, is_a_int, is_a_bool, is_a_float,
     is_a_coord, is_a_coord_pair, is_a_country, is_a_city, is_a_region,
     is_a_address, is_a_text, is_a_zip, is_a_street, is_a_phone, is_a_url, 
-    is_a_email, is_a_str)
+    is_a_email, is_a_str,is_a_time)
 
 
 """Guesses likelikhood that a column is of the requested type based on its
@@ -31,6 +31,7 @@ def column_probability_for_type(values, for_type, pos=None, key=None):
 
     type_checkers = {
         'date': is_a_date,
+        'time': is_a_time,
         'bool': is_a_bool,
         'int': is_a_int,
         'float': is_a_float,
@@ -177,6 +178,10 @@ def category_probability(values, key=None, pos=None):
     total_rows = len(values)
     non_empty = [str(r).strip() for r in values if str(r).strip() != '']
 
+    # If every value is the same, it's not a category we care about
+    if len(list(set(values))) == 1:
+        return 0
+
     # If this is a mostly empty rows, we don't want to use it
     if len(non_empty) < len(values) / 2:
         return 0
@@ -265,7 +270,6 @@ def category_probability(values, key=None, pos=None):
         prob = float(total_categorized) / float(tu)
         uncategorized_ratio = float(tu) / float(total_categorized)
 
-        print uncategorized_ratio
         if uncategorized_ratio > .5:
             return 0
 
